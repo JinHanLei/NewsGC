@@ -1,4 +1,4 @@
-# FinGC
+# NewsGC
 
 This is a Pytorch implementation of NewsGC
 
