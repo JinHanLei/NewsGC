@@ -104,8 +104,6 @@ class MultiNewsSummaryDataset:
                     source_data_feature.append(feat)
                     graph.append(adj)
                     count += 1
-                    if count > 500:
-                        break
             with open(source_pro_path, 'wb') as f:
                 pkl.dump(source_data, f)
             with open(graph_path, 'wb') as f:
