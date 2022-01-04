@@ -1,6 +1,6 @@
 # FinGC
 
-This is a Pytorch implementation of the FinGC model as described in our paper
+This is a Pytorch implementation of NewsGC
 
 ## Run the demo
 
