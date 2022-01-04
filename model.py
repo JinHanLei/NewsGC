@@ -60,17 +60,17 @@ class KMeansModel(nn.Module):
         cluster_centers = k_means.cluster_centers_
         labels = k_means.labels_
         # 簇内距离之和
-        inertia = k_means.inertia_
+        # inertia = k_means.inertia_
         sentence_index = []
         sentence_feat = []
         for i, center in enumerate(cluster_centers):
             euc_distance = []
             for j, (f, label) in enumerate(zip(feature, labels)):
                 if label == i:
-                    euc_distance.append([j, np.linalg.norm(center - f)])
+                    euc_distance.append([j, np.linalg.norm(center - f), f])
             euc_distance = sorted(euc_distance, key=lambda x: x[1])
             sentence_index.append(euc_distance[0][0])
-            sentence_feat.append(euc_distance[0][1])
+            sentence_feat.append(euc_distance[0][2])
         cluster_centers = torch.FloatTensor(cluster_centers)
         sentence_feat = torch.FloatTensor(sentence_feat)
         # for i, f in enumerate(feature):

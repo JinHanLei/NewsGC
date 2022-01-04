@@ -5,6 +5,7 @@ import numpy as np
 import scipy.sparse as sp
 import torch
 from torch import optim
+from transformers.utils import logging
 
 from model import GCNModelVAE, KMeansModel
 from optimizer import gae_loss_function, k_means_loss_function
@@ -14,7 +15,7 @@ from evaluate import single_text_rouge
 
 
 def main():
-    features, src, adjs, tgt = load_graph(args.multi_news)
+    features, srcs, adjs, tgt = load_graph(args.multi_news)
     summaries = []
     rouge1_list = []
     rouge2_list = []
@@ -25,6 +26,7 @@ def main():
         # model输入
         adj = adjs[i]
         adj_norm = preprocess_graph(adj)
+        src = srcs[i]
         # loss所需参数
         pos_weight = torch.Tensor([float(adj.shape[0] * adj.shape[0] - adj.sum()) / adj.sum()])
         norm = adj.shape[0] * adj.shape[0] / float((adj.shape[0] * adj.shape[0] - adj.sum()) * 2)
@@ -53,9 +55,9 @@ def main():
             # print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(cur_loss),
             #       "time=", "{:.5f}".format(time.time() - t)
             #       )
-
-        for ind in sentence_index:
-            summary = '.'.join(src[ind])
+        summary_index = [src[ind] for ind in sentence_index]
+        summary = '.'.join(summary_index)
+        # print(summary, "\t", tgt[i])
         summaries.append(summary)
         res = single_text_rouge(summary, tgt[i])
         rouge1 = res[0]["rouge-1"]['f']
@@ -72,4 +74,5 @@ def main():
 
 
 if __name__ == '__main__':
+    logging.set_verbosity_error()
     main()
